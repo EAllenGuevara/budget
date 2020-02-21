@@ -1,17 +1,12 @@
 import React from 'react'
 
-import { DEFAULT_ENVELOPES } from './constants'
-
-export default function Envelopes() {
+export default function Envelopes(props) {
     function handleDrop(target, e) {
-        e.preventDefault()
-        console.log('Dropped in: ')
-        console.dir(target)
-        console.log('with: ')
-        console.dir(e.dataTransfer.getData('text'))
+        e.preventDefault();
+        props.onDrop(target, e.dataTransfer.getData('text'));
     }
 
-    const envelopes = DEFAULT_ENVELOPES.map((envelope) => 
+    const envelopes = props.envelopes.map((envelope) => 
         <tr key={envelope.id} onDragOver={e => e.preventDefault()} onDrop={e => { handleDrop(envelope, e) }}>
             <td>{envelope.name}</td>
             <td>{envelope.amount}</td>
