@@ -28,6 +28,7 @@ export const INITIAL_STATE = {
     transactions: [
         {
             id: '1',
+            date: '06/07/2020',
             name: 'Rent payment',
             amount: 1400,
             type: 'withdrawl',
@@ -35,6 +36,7 @@ export const INITIAL_STATE = {
         },
         {
             id: '2',
+            date: '06/10/2020',
             name: 'Electric bill payment',
             amount: 121,
             type: 'withdrawl',
@@ -42,37 +44,47 @@ export const INITIAL_STATE = {
         },
         {
             id: '3',
+            date: '06/07/2020',
             name: 'Water bill payment',
             amount: 100,
             type: 'withdrawl',
-            accountId: '1'
+            accountId: '3'
         },
         {
             id: '4',
+            date: '06/08/2020',
             name: 'Grocery',
             amount: 130,
             type: 'withdrawl',
             accountId: '2'
+        },
+        {
+            id: '5',
+            date: '06/08/2020',
+            name: 'Rewards Check',
+            amount: 215.98,
+            type: 'deposit',
+            accountId: '1'
         },
     ],
     accounts: [
         {
             id: '1',
             name: 'Checking',
-            amount: 1400,
-            accountId: '1'
+            onlineBalance: 1400,
+            registerBalance: 1400
         },
         {
             id: '2',
             name: 'Savings',
-            amount: 121,
-            accountId: '1'
+            onlineBalance: 130,
+            registerBalance: 130
         },
         {
             id: '3',
             name: 'Credit card',
-            amount: -100,
-            accountId: '1'
+            onlineBalance: -100,
+            registerBalance: -100
         },
     ],
 }

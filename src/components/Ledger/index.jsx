@@ -1,14 +1,22 @@
 import React from 'react'
 
-import { DEFAULT_ACCOUNTS } from './constants'
-
-export default function Ledger() {
-    const accounts = DEFAULT_ACCOUNTS.map((account) => 
+export default function Ledger(props) {
+    const accounts = props.accounts.map((account) => 
         <tr key={account.id}>
             <td>{account.name}</td>
-            <td>{account.amount}</td>
+            <td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(account.onlineBalance)}</td>
+            <td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(account.registerBalance)}</td>
         </tr>
     );
 
-    return <table className="table table-striped"><tbody>{accounts}</tbody></table>;
+    return <table className="table table-striped">
+            <tbody>
+                <tr>
+                    <th>Account Name</th>
+                    <th>Online Balance</th>
+                    <th>Register Balance</th>
+                </tr>
+                {accounts}
+            </tbody>
+        </table>;
 }

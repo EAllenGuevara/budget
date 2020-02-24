@@ -9,7 +9,7 @@ export default function Envelopes(props) {
     const envelopes = props.envelopes.map((envelope) => 
         <tr key={envelope.id} onDragOver={e => e.preventDefault()} onDrop={e => { handleDrop(envelope, e) }}>
             <td>{envelope.name}</td>
-            <td>{envelope.amount}</td>
+            <td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.amount)}</td>
         </tr>
     );
 
