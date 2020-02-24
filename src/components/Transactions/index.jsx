@@ -1,13 +1,11 @@
 import React from 'react'
 
-import { DEFAULT_TRANSACTIONS } from './constants'
-
-export default function Transactions() {
+export default function Transactions(props) {
     function handleDrag(target, e) {
         e.dataTransfer.setData('text', target.id);
     }
 
-    const transactions = DEFAULT_TRANSACTIONS.map((transaction) => 
+    const transactions = props.transactions.map((transaction) => 
         <tr draggable={true} onDragStart={e => { handleDrag(transaction, e)}} key={transaction.id} item={transaction}>
             <td>{transaction.name}</td>
             <td>{transaction.amount}</td>
