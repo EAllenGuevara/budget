@@ -1,5 +1,9 @@
 import React from 'react'
 
+/**
+ * Component to display and update accounts
+ * @param {Object} props 
+ */
 export default function Ledger(props) {
     const accounts = props.accounts.map((account) => 
         <tr key={account.id}>

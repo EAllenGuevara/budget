@@ -1,28 +1,55 @@
+import { SYSTEM_ENVELOPES } from './components/Envelopes/constants';
+
 export const INITIAL_STATE = {
     envelopes: [
+        {
+            id: '0',
+            name: SYSTEM_ENVELOPES.CASH_POOL,
+            amount: 2154.77,
+            accountId: '1',
+            systemEnvelope: true
+        },
+        {
+            id: '000',
+            name: SYSTEM_ENVELOPES.ACCOUNT_TRANSFERS,
+            amount: 0,
+            accountId: '1',
+            systemEnvelope: true
+        },
+        {
+            id: '00000',
+            name: SYSTEM_ENVELOPES.CREDIT_CARD_PAYMENTS,
+            amount: 0,
+            accountId: '1',
+            systemEnvelope: true
+        },
         {
             id: '1',
             name: 'Rent',
             amount: 0,
-            accountId: '1'
+            accountId: '1',
+            systemEnvelope: false
         },
         {
             id: '2',
             name: 'Electric',
             amount: 121,
-            accountId: '1'
+            accountId: '1',
+            systemEnvelope: false
         },
         {
             id: '3',
             name: 'Water',
             amount: 100,
-            accountId: '1'
+            accountId: '1',
+            systemEnvelope: false
         },
         {
             id: '4',
             name: 'Miscellaneous',
             amount: 250,
-            accountId: '2'
+            accountId: '2',
+            systemEnvelope: false
         },
     ],
     transactions: [
@@ -71,7 +98,7 @@ export const INITIAL_STATE = {
         {
             id: '1',
             name: 'Checking',
-            onlineBalance: 1400,
+            onlineBalance: 1615.98,
             registerBalance: 1400
         },
         {

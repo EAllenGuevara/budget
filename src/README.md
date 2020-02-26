@@ -1,0 +1,1 @@
+This a budgeting application that allows the user to use the *__envelope__* budgeting technique in software form.
