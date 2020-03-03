@@ -20,6 +20,17 @@ class App extends React.Component {
     this.state = INITIAL_STATE;
     //allows 'this' to be accessed in inner functions
     this.handleTransactionDrop = this.handleTransactionDrop.bind(this);
+    this.handleFunding = this.handleFunding.bind(this);
+  }
+
+  handleFunding(updatedEnvelopes) {
+    //only update if data passed
+    if(updatedEnvelopes) {
+      this.setState(state => {
+        return { ...state, envelopes: updatedEnvelopes};
+      });
+    }
+    
   }
 
   /**
@@ -66,7 +77,7 @@ class App extends React.Component {
     return <div className="container-fluid">
               <div className="row">
                 <div className="col-md-3">
-                  <div className="row"><Envelopes envelopes={this.state.envelopes} onDrop={this.handleTransactionDrop} /></div>
+                  <div className="row"><Envelopes envelopes={this.state.envelopes} onDrop={this.handleTransactionDrop} onFunding={this.handleFunding}/></div>
                   <div className="row"><Ledger accounts={this.state.accounts} /></div>
                 </div>
                 <div className="col-md-9"><Transactions transactions={this.state.transactions} accounts={this.state.accounts} /></div>

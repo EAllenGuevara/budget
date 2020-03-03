@@ -12,7 +12,7 @@ import FundingModal from './components/FundingModal';
  * @param {Object} props 
  */
 export default function Envelopes(props) {
-    const [modalShow, setModalShow] = useState(false); 
+    const [modalShow, setModalShow] = useState(false);
     /**
      * Prevents default drop behavior and passes data back up to parent drop event handler
      * @param {Object} target - The target envelope for the transaction being dropped 
@@ -21,6 +21,11 @@ export default function Envelopes(props) {
     function handleDrop(target, e) {
         e.preventDefault();
         props.onDrop(target, e.dataTransfer.getData('text'));
+    }
+
+    function handleModalClose(updatedEnvelopes) {
+        props.onFunding(updatedEnvelopes);
+        setModalShow(false);
     }
 
     const envelopes = props.envelopes.map((envelope) => 
@@ -38,7 +43,10 @@ export default function Envelopes(props) {
             <Button variant="outline-secondary" size="sm">Add</Button>
             <Button variant="outline-secondary" size="sm">Delete</Button>
         </ButtonToolbar>
-        <FundingModal show={modalShow} envelopes={props.envelopes} onHide={() => setModalShow(false)}></FundingModal>
+        {modalShow &&
+           <FundingModal show={true} envelopes={props.envelopes} onHide={handleModalClose}></FundingModal> 
+        }
+        
         <table className="table table-striped">
             <tbody>
                 {envelopes}
