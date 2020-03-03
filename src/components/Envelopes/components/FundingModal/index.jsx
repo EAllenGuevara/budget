@@ -36,9 +36,9 @@ export default function FundingModal(props) {
         if(!envelope.systemEnvelope) {
             env = <tr key={envelope.id}>
                 <td>{envelope.name}</td>
-                <td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.amount)}</td>
+                <td className={envelope.amount < 0 ? 'text-danger':''}>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.amount)}</td>
                 <td><Form.Control size="sm" type="number" name={i} value={envelope.inputAmount} onChange={handleInputChange} /></td>
-                <td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.updatedAmount)}</td>
+                <td className={envelope.updatedAmount < 0 ? 'text-danger':''}>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.updatedAmount)}</td>
             </tr>;
         }
         
@@ -92,13 +92,18 @@ export default function FundingModal(props) {
         props.onHide();    
     }
 
+    /**
+     * Create new version of envelopes from state and start passing it all
+     * the way up to the App component.
+     */
     function fund() {
         const updatedEnvelopes = state.envelopes.map(envelope => {
             const envCopy = {...envelope}
             //update cash pool
             if(envCopy.name === SYSTEM_ENVELOPES.CASH_POOL) {
                 envCopy.amount = envCopy.amount - state.allocation;
-            } else if(envCopy.updatedAmount !== 0) {
+            //only update if changed
+            } else if(envCopy.updatedAmount !== envCopy.amount) {
                 envCopy.amount = envCopy.updatedAmount;
             }
 
@@ -146,7 +151,7 @@ export default function FundingModal(props) {
                 <tbody>
                     <tr>
                         <td>Available</td>
-                        <td>{props.envelopes[0].amount}</td>
+                        <td className={props.envelopes[0].amount < 0 ? 'text-danger':''}>{props.envelopes[0].amount}</td>
                     </tr>
                     <tr>
                         <td>Allocation</td>
@@ -154,7 +159,7 @@ export default function FundingModal(props) {
                     </tr>
                     <tr>
                         <td>Difference</td>
-                        <td>{props.envelopes[0].amount - state.allocation}</td>
+                        <td className={props.envelopes[0].amount - state.allocation < 0 ? 'text-danger':''}>{props.envelopes[0].amount - state.allocation}</td>
                     </tr>
                 </tbody>
             </table>

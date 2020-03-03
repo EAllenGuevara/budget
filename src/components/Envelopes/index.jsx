@@ -24,14 +24,17 @@ export default function Envelopes(props) {
     }
 
     function handleModalClose(updatedEnvelopes) {
-        props.onFunding(updatedEnvelopes);
+        //only update if data passed
+        if(updatedEnvelopes) {
+            props.onFunding(updatedEnvelopes);
+        }
         setModalShow(false);
     }
 
     const envelopes = props.envelopes.map((envelope) => 
         <tr key={envelope.id} onDragOver={e => e.preventDefault()} onDrop={e => { handleDrop(envelope, e) }}>
             <td>{envelope.name}</td>
-            <td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.amount)}</td>
+            <td className={envelope.amount < 0 ? 'text-danger':''}>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.amount)}</td>
         </tr>
     );
     

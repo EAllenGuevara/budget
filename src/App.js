@@ -23,14 +23,14 @@ class App extends React.Component {
     this.handleFunding = this.handleFunding.bind(this);
   }
 
+  /**
+   * Updates envelopes in the state object after funding
+   * @param {Object} updatedEnvelopes - Envelopes with updated amounts from funding modal
+   */
   handleFunding(updatedEnvelopes) {
-    //only update if data passed
-    if(updatedEnvelopes) {
       this.setState(state => {
         return { ...state, envelopes: updatedEnvelopes};
-      });
-    }
-    
+      });    
   }
 
   /**
