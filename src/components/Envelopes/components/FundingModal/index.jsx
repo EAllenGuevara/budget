@@ -7,8 +7,8 @@ import Form from 'react-bootstrap/Form'
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 
-import { SYSTEM_ENVELOPES } from '../../constants';
-//temporary im place of api
+import { SYSTEM_ENVELOPES, BUDGET_MODAL_CONSTANTS } from '../../constants';
+//temporary in place of api
 import { FUNDING_PROFILES } from '../../../Budget/components/Funding_Profile/constants';
 
 export default function FundingModal(props) {    
@@ -89,7 +89,7 @@ export default function FundingModal(props) {
     }
 
     function cancel() {
-        props.onHide();    
+        props.onHide(BUDGET_MODAL_CONSTANTS.TOGGLE_FUNDING_MODAL);    
     }
 
     /**
@@ -114,7 +114,7 @@ export default function FundingModal(props) {
             return envCopy;
         });
 
-        props.onHide(updatedEnvelopes);
+        props.onHide(BUDGET_MODAL_CONSTANTS.TOGGLE_FUNDING_MODAL, updatedEnvelopes);
     }
 
     return (
