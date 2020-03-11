@@ -1,5 +1,10 @@
 import React from 'react'
 
+//third party
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+import Table from 'react-bootstrap/Table';
+
 /**
  * Component to display and edit transactions
  * @param {Object} props 
@@ -34,7 +39,9 @@ export default function Transactions(props) {
         }
     );
 
-    return <table className="table table-striped">
+    return <Tabs defaultActiveKey="new">
+        <Tab eventKey="new" title="New">
+            <Table striped >
                 <tbody>
                     <tr>
                         <th>Date</th>
@@ -45,5 +52,11 @@ export default function Transactions(props) {
                     </tr>
                     {transactions}
                 </tbody>
-            </table>;
+            </Table>
+        </Tab>
+        <Tab eventKey="pending" title="Pending">
+            Blarp
+        </Tab>
+    </Tabs>
+    
 }

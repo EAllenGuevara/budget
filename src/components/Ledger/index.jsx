@@ -1,5 +1,8 @@
 import React from 'react'
 
+//third party
+import Table from 'react-bootstrap/Table';
+
 /**
  * Component to display and update accounts
  * @param {Object} props 
@@ -13,7 +16,7 @@ export default function Ledger(props) {
         </tr>
     );
 
-    return <table className="table table-striped">
+    return <Table striped >
             <tbody>
                 <tr>
                     <th>Account Name</th>
@@ -22,5 +25,5 @@ export default function Ledger(props) {
                 </tr>
                 {accounts}
             </tbody>
-        </table>;
+        </Table>;
 }

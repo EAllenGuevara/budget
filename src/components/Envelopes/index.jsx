@@ -1,8 +1,9 @@
 import React, { useReducer } from 'react';
 
-//bootstrap
+//third party
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 
 import { BUDGET_MODAL_CONSTANTS } from './constants';
 
@@ -85,10 +86,10 @@ export default function Envelopes(props) {
         {state.showTransferModal &&
            <TransferModal show={true} envelopes={props.envelopes} onHide={handleModalClose}></TransferModal> 
         }        
-        <table className="table table-striped">
+        <Table striped >
             <tbody>
                 {envelopes}
             </tbody>
-        </table>
+        </Table>
         </>;
 }

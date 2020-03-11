@@ -2,6 +2,11 @@ import React from 'react';
 import './App.css';
 
 //third party
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 
 //constants
@@ -109,15 +114,27 @@ class App extends React.Component {
   }
 
   render() {
-    return <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-3">
-                  <div className="row"><Envelopes envelopes={this.state.envelopes} onDrop={this.handleTransactionDrop} onFunding={this.handleFunding}/></div>
-                  <div className="row"><Ledger accounts={this.state.accounts} /></div>
-                </div>
-                <div className="col-md-9"><Transactions transactions={this.state.transactions} accounts={this.state.accounts} /></div>
-              </div>
-            </div>;
+    return <>
+            <Navbar bg="dark" variant="dark">
+              <Navbar.Brand href="#home">Budget app</Navbar.Brand>
+              <Nav className="mr-auto">
+                <Nav.Link href="#home">Home</Nav.Link>
+                <Nav.Link href="#features">Budget</Nav.Link>
+                <Nav.Link href="#pricing">Accounts</Nav.Link>
+              </Nav>
+            </Navbar>
+            <Container fluid={true}>
+              <Row>
+                <Col md={3}>
+                  <Row><Envelopes envelopes={this.state.envelopes} onDrop={this.handleTransactionDrop} onFunding={this.handleFunding}/></Row>
+                  <Row><Ledger accounts={this.state.accounts} /></Row>
+                </Col>
+                <Col md={9}>
+                  <Transactions transactions={this.state.transactions} accounts={this.state.accounts} />
+                </Col>
+              </Row>
+            </Container>
+  </>
   }
 }
 export default App;
