@@ -62,7 +62,7 @@ export default function Envelopes(props) {
     }
 
     const envelopes = props.envelopes.map((envelope) => 
-        <tr key={envelope.id} onDragOver={e => e.preventDefault()} onDrop={e => { handleDrop(envelope, e) }}>
+        <tr key={envelope._id} onDragOver={e => e.preventDefault()} onDrop={e => { handleDrop(envelope, e) }}>
             <td>{envelope.name}</td>
             <td className={envelope.amount < 0 ? 'text-danger':''}>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.amount)}</td>
         </tr>

@@ -18,7 +18,7 @@ export default function TransferModal(props) {
     //filter out system envelopes and create mutable copy of array
     const fromEnvelopes = props.envelopes
         .filter((envelope) => !envelope.systemEnvelope)
-        .map((envelope) =><option key={envelope.id} value={envelope.id}>{envelope.name}</option>);
+        .map((envelope) =><option key={envelope._id} value={envelope._id}>{envelope.name}</option>);
 
     function cancel() {
         props.onHide(BUDGET_MODAL_CONSTANTS.TOGGLE_TRANSFER_MODAL);    
@@ -31,13 +31,13 @@ export default function TransferModal(props) {
     }
 
     function handleFromChange(e) {
-        setFromEnvelope(props.envelopes.find((env) => env.id === e.target.value));
-        const toEnvelopes = fromEnvelopes.filter((env) => env.key != e.target.value);
-        setToEnvelopes(toEnvelopes);
+        setFromEnvelope(props.envelopes.find((env) => env._id === e.target.value));
+        //must filter based on dom key attr here
+        setToEnvelopes(fromEnvelopes.filter((env) => env.key !== e.target.value));
     }
 
     function handleToChange(e) {
-        setToEnvelope(props.envelopes.find((env) => env.id === e.target.value));
+        setToEnvelope(props.envelopes.find((env) => env._id === e.target.value));
     }
 
     /**
@@ -47,10 +47,10 @@ export default function TransferModal(props) {
     function transferFunds() {
         const updatedEnvelopes = [...props.envelopes];
         //update from envelope amount
-        const fromEnvIndex = updatedEnvelopes.findIndex((env) => env.id === fromEnvelope.id);
+        const fromEnvIndex = updatedEnvelopes.findIndex((env) => env._id === fromEnvelope._id);
         updatedEnvelopes[fromEnvIndex].amount -= transferAmount;
         //update to envelope amount
-        const toEnvIndex = updatedEnvelopes.findIndex((env) => env.id === toEnvelope.id);
+        const toEnvIndex = updatedEnvelopes.findIndex((env) => env._id === toEnvelope._id);
         updatedEnvelopes[toEnvIndex].amount += transferAmount;
         
         props.onHide(BUDGET_MODAL_CONSTANTS.TOGGLE_TRANSFER_MODAL, updatedEnvelopes);

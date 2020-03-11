@@ -11,7 +11,7 @@ export default function Transactions(props) {
      * @param {Object} e - Event object
      */
     function handleDrag(target, e) {
-        e.dataTransfer.setData('text', target.id);
+        e.dataTransfer.setData('text', target._id);
     }
 
     /**
@@ -20,11 +20,11 @@ export default function Transactions(props) {
      * @returns {String}
      */
     function getAccountName(accountId) {
-        return props.accounts.find(account => account.id === accountId).name;
+        return props.accounts.find(account => account._id === accountId).name;
     }
 
     const transactions = props.transactions.map((transaction) => {
-            return <tr draggable={true} onDragStart={e => { handleDrag(transaction, e)}} key={transaction.id} item={transaction}>
+            return <tr draggable={true} onDragStart={e => { handleDrag(transaction, e)}} key={transaction._id} item={transaction}>
                 <td>{new Intl.DateTimeFormat('en-US').format(new Date(transaction.date))}</td>
                 <td>{transaction.name}</td>
                 <td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(transaction.amount)}</td>

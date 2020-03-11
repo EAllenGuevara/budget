@@ -3,6 +3,6 @@ export const ITEM_TYPES = {
 }
 
 export const TRANSACTION_TYPES = {
-    WITHDRAWL: 'withdrawl',
-    DEPOSIT: 'deposit'
+    WITHDRAWAL: 'WITHDRAWAL',
+    DEPOSIT: 'DEPOSIT'
 }

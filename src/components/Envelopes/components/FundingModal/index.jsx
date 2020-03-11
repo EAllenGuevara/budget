@@ -34,7 +34,7 @@ export default function FundingModal(props) {
     let fundingEnvelopes = state.envelopes.map((envelope, i) => {
         let env = null;
         if(!envelope.systemEnvelope) {
-            env = <tr key={envelope.id}>
+            env = <tr key={envelope._id}>
                 <td>{envelope.name}</td>
                 <td className={envelope.amount < 0 ? 'text-danger':''}>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.amount)}</td>
                 <td><Form.Control size="sm" type="number" name={i} value={envelope.inputAmount} onChange={handleInputChange} /></td>
@@ -57,7 +57,7 @@ export default function FundingModal(props) {
             prevStateCopy.envelopes.forEach((env) => {
                 //find matching envelope if none found reset values
                 const matchingEnvelope = selectedProfile 
-                    ? selectedProfile.envelopes.find((profileEnvelope) => env.id === profileEnvelope.id )
+                    ? selectedProfile.envelopes.find((profileEnvelope) => env._id === profileEnvelope._id )
                     : null;
                 env.inputAmount = matchingEnvelope ? matchingEnvelope.amount : 0;
                 env.updatedAmount = matchingEnvelope ? matchingEnvelope.amount + env.amount : env.amount;

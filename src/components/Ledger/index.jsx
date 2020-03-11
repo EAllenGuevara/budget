@@ -6,7 +6,7 @@ import React from 'react'
  */
 export default function Ledger(props) {
     const accounts = props.accounts.map((account) => 
-        <tr key={account.id}>
+        <tr key={account._id}>
             <td>{account.name}</td>
             <td className={account.onlineBalance < 0 ? 'text-danger':''}>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(account.onlineBalance)}</td>
             <td className={account.registerBalance < 0 ? 'text-danger':''}>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(account.registerBalance)}</td>

@@ -1,8 +1,11 @@
 import React from 'react';
 import './App.css';
 
+//third party
+import axios from 'axios';
+
 //constants
-import { INITIAL_STATE } from './constants'
+import { INITIAL_STATE, ENDPOINTS } from './constants'
 import { TRANSACTION_TYPES } from './components/Transactions/constants'
 
 //components
@@ -21,6 +24,25 @@ class App extends React.Component {
     //allows 'this' to be accessed in inner functions
     this.handleTransactionDrop = this.handleTransactionDrop.bind(this);
     this.handleFunding = this.handleFunding.bind(this);
+    this.setOthers = this.setOthers.bind(this);
+  }
+
+  componentDidMount() {
+    //transactions depend on account so be sure to get account data first
+    fetch(ENDPOINTS.accounts)
+      .then((data) => data.json())
+      .then((res) => {
+          this.setState(state => {
+            return { ...state, accounts: res, accountsLoaded: true}
+          });
+          //now get transaction and envelope data
+          axios.all([
+            axios.get(ENDPOINTS.transactions),
+            axios.get(ENDPOINTS.envelopes)
+          ])
+          .then(axios.spread(this.setOthers));
+        }
+      );
   }
 
   /**
@@ -41,23 +63,36 @@ class App extends React.Component {
    */
   handleTransactionDrop(targetEnvelope, transactionId) {
     //get transaction object
-    const transactionIndex = this.state.transactions.findIndex(transaction => transaction.id === transactionId);
+    const transactionIndex = this.state.transactions.findIndex(transaction => transaction._id === transactionId);
     const transaction = { ...this.state.transactions[transactionIndex] };
     //update the amount in the envelope
     const updatedEnvelopeAmount = this.updateAmount(parseFloat(targetEnvelope.amount), transaction);
     const updatedEnvelope = {...targetEnvelope, amount: updatedEnvelopeAmount};
     //find affected account and update
-    const affectedAccount = this.state.accounts.find(account => account.id === transaction.accountId);
+    const affectedAccount = this.state.accounts.find(account => account._id === transaction.accountId);
     const updatedAccountBalance = this.updateAmount(parseFloat(affectedAccount.registerBalance), transaction);
     const updatedAccount = {...affectedAccount, registerBalance: updatedAccountBalance};
     //update state
     this.setState((state) => {
       //TODO: add transaction to envelopes so user can see history
       return {
-        envelopes: state.envelopes.map(envelope => envelope.id === updatedEnvelope.id ? updatedEnvelope : envelope),
-        transactions: state.transactions.filter(transaction => transaction.id !== transactionId),
-        accounts: state.accounts.map(account => account.id === updatedAccount.id ? updatedAccount: account)
+        ...state,
+        envelopes: state.envelopes.map(envelope => envelope._id === updatedEnvelope._id ? updatedEnvelope : envelope),
+        transactions: state.transactions.filter(transaction => transaction._id !== transactionId),
+        accounts: state.accounts.map(account => account._id === updatedAccount._id ? updatedAccount: account)
       };
+    });
+  }
+
+  setOthers(transactionsResponse, envelopesResponse) {
+    this.setState(state => {
+      return {
+        ...state,
+        transactions: transactionsResponse.data,
+        transactionsLoaded: true,
+        envelopes: envelopesResponse.data,
+        envelopesLoaded: true,
+      }
     });
   }
 
@@ -69,7 +104,7 @@ class App extends React.Component {
    */
   updateAmount(itemAmount, transaction) {
     const transactionAmount = parseFloat(transaction.amount);
-    return transaction.type === TRANSACTION_TYPES.WITHDRAWL 
+    return transaction.type === TRANSACTION_TYPES.WITHDRAWAL
       ? itemAmount - transactionAmount : itemAmount + transactionAmount;
   }
 
