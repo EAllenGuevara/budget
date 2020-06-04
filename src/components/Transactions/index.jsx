@@ -7,9 +7,10 @@ import Table from 'react-bootstrap/Table';
 
 /**
  * Component to display and edit transactions
+ * @component
  * @param {Object} props 
  */
-export default function Transactions(props) {
+function Transactions(props) {
     /**
      * Sets transaction id to drag event dataTransfer object
      * @param {Object} target - Transaction to be dragged
@@ -60,3 +61,5 @@ export default function Transactions(props) {
     </Tabs>
     
 }
+
+export default Transactions;

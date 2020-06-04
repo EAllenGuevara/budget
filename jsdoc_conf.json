@@ -1,5 +1,8 @@
 {
-    "plugins": [],
+    "plugins": [
+        "node_modules/better-docs/component",
+        "node_modules/better-docs/category"
+    ],
     "recurseDepth": 10,
     "source": {
         "includePattern": ".+\\.js(doc|x)?$",
@@ -13,5 +16,8 @@
     "templates": {
         "cleverLinks": false,
         "monospaceLinks": false
+    },
+    "opts": {
+        "template": "node_modules/better-docs"
     }
 }

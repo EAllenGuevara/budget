@@ -5,9 +5,10 @@ import Table from 'react-bootstrap/Table';
 
 /**
  * Component to display and update accounts
+ * @component
  * @param {Object} props 
  */
-export default function Ledger(props) {
+function Ledger(props) {
     const accounts = props.accounts.map((account) => 
         <tr key={account._id}>
             <td>{account.name}</td>
@@ -27,3 +28,5 @@ export default function Ledger(props) {
             </tbody>
         </Table>;
 }
+
+export default Ledger;

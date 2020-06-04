@@ -14,9 +14,10 @@ import TransferModal from './components/TransferModal';
 
 /**
  * Component to display and update envelopes
+ * @component
  * @param {Object} props 
  */
-export default function Envelopes(props) {
+function Envelopes(props) {
     const initialState = {
         showFundingModal: false,
         showSweepModal: false,
@@ -93,3 +94,5 @@ export default function Envelopes(props) {
         </Table>
         </>;
 }
+
+export default Envelopes;

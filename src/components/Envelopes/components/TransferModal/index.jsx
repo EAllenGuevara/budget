@@ -7,7 +7,13 @@ import Form from 'react-bootstrap/Form';
 
 import { BUDGET_MODAL_CONSTANTS } from '../../constants';
 
-export default function TransferModal(props) {
+/**
+ * Component to handle funds transfers between envelopes
+ * @component
+ * @category Modals
+ * @param {Object} props 
+ */
+function TransferModal(props) {
     const [fromEnvelope, setFromEnvelope] = useState({});
     const [toEnvelope, setToEnvelope] = useState({});
     const [toEnvelopes, setToEnvelopes] = useState([]);
@@ -36,6 +42,10 @@ export default function TransferModal(props) {
         setToEnvelopes(fromEnvelopes.filter((env) => env.key !== e.target.value));
     }
 
+    /**
+     * Sets target envelope to transfer funds to
+     * @param {Object} e - event object 
+     */
     function handleToChange(e) {
         setToEnvelope(props.envelopes.find((env) => env._id === e.target.value));
     }
@@ -104,3 +114,4 @@ export default function TransferModal(props) {
     );
   }
 
+  export default TransferModal;

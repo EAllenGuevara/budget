@@ -1,0 +1,242 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/Envelopes/components/TransferModal/index.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                <div class="dropdown is-hoverable is-right">
+                    <a class="dropdown-trigger link">
+                        Tutorials
+                        <i class="fas fa-chevron-down fa-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                        
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="App.html">App</a></li></ul><h3>Components</h3><ul><li><a href="Envelopes.html">Envelopes</a></li><li><a href="Ledger.html">Ledger</a></li><li><a href="Transactions.html">Transactions</a></li></ul></div><div class="category"><h2>Modals</h2><h3>Components</h3><ul><li><a href="TransferModal.html">TransferModal</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/Envelopes/components/TransferModal/index.jsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+
+//bootstrap
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+
+import { BUDGET_MODAL_CONSTANTS } from '../../constants';
+
+/**
+ * Component to handle funds transfers between envelopes
+ * @component
+ * @category Modals
+ * @param {Object} props 
+ */
+function TransferModal(props) {
+    const [fromEnvelope, setFromEnvelope] = useState({});
+    const [toEnvelope, setToEnvelope] = useState({});
+    const [toEnvelopes, setToEnvelopes] = useState([]);
+    //must initialize controlled number input to something to avoid 'uncontrolled to controlled' error
+    const [transferAmount, setTransferAmount] = useState('');
+    const [entireBalance, setEntireBalance] = useState(false);
+    
+    //filter out system envelopes and create mutable copy of array
+    const fromEnvelopes = props.envelopes
+        .filter((envelope) => !envelope.systemEnvelope)
+        .map((envelope) =>&lt;option key={envelope._id} value={envelope._id}>{envelope.name}&lt;/option>);
+
+    function cancel() {
+        props.onHide(BUDGET_MODAL_CONSTANTS.TOGGLE_TRANSFER_MODAL);    
+    }
+
+    function handleEntireBalance(e) {
+        setEntireBalance(e.target.checked);
+        const balance = e.target.checked ? fromEnvelope.amount : 0;
+        setTransferAmount(balance);
+    }
+
+    function handleFromChange(e) {
+        setFromEnvelope(props.envelopes.find((env) => env._id === e.target.value));
+        //must filter based on dom key attr here
+        setToEnvelopes(fromEnvelopes.filter((env) => env.key !== e.target.value));
+    }
+
+    /**
+     * Sets target envelope to transfer funds to
+     * @param {Object} e - event object 
+     */
+    function handleToChange(e) {
+        setToEnvelope(props.envelopes.find((env) => env._id === e.target.value));
+    }
+
+    /**
+     * Create new version of envelopes from state and start passing it all
+     * the way up to the App component.
+     */
+    function transferFunds() {
+        const updatedEnvelopes = [...props.envelopes];
+        //update from envelope amount
+        const fromEnvIndex = updatedEnvelopes.findIndex((env) => env._id === fromEnvelope._id);
+        updatedEnvelopes[fromEnvIndex].amount -= transferAmount;
+        //update to envelope amount
+        const toEnvIndex = updatedEnvelopes.findIndex((env) => env._id === toEnvelope._id);
+        updatedEnvelopes[toEnvIndex].amount += transferAmount;
+        
+        props.onHide(BUDGET_MODAL_CONSTANTS.TOGGLE_TRANSFER_MODAL, updatedEnvelopes);
+    }
+
+    return (
+      &lt;Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        &lt;Modal.Header closeButton>
+            Envelope Transfer
+        &lt;/Modal.Header>
+        &lt;Modal.Body>
+            &lt;Form>
+                &lt;Form.Group controlId="exampleForm.ControlSelect1">
+                    &lt;Form.Label>Transfer From:&lt;/Form.Label>
+                    &lt;Form.Control as="select" onChange={handleFromChange}>
+                        &lt;option value={{}}>&lt;/option>
+                        {fromEnvelopes}
+                    &lt;/Form.Control>
+                &lt;/Form.Group>
+                &lt;h6>Current Balance: {fromEnvelope.amount}&lt;/h6>
+                &lt;h6>Balance After Transfer: {fromEnvelope.amount - transferAmount}&lt;/h6>
+                &lt;Form.Group controlId="exampleForm.ControlSelect2">
+                    &lt;Form.Label>To:&lt;/Form.Label>
+                    &lt;Form.Control as="select" onChange={handleToChange}>
+                        &lt;option value={null}>&lt;/option>
+                        {toEnvelopes}
+                    &lt;/Form.Control>
+                &lt;/Form.Group>
+                &lt;h6>Current Balance: {toEnvelope.amount}&lt;/h6>
+                &lt;h6>Balance After Transfer: {toEnvelope.amount + transferAmount}&lt;/h6>
+                &lt;Form.Group controlId="formGroupEmail">
+                    &lt;Form.Label>Amount:&lt;/Form.Label>
+                    &lt;Form.Control type="number" disabled={entireBalance} value={transferAmount} onChange={(e) => setTransferAmount(parseFloat(e.target.value))}/>
+                &lt;/Form.Group>                
+                &lt;Form.Group id="formGridCheckbox">
+                    &lt;Form.Check type="checkbox" label="Apply Entire Balance" onChange={handleEntireBalance} disabled={!fromEnvelope.amount} />
+                &lt;/Form.Group>
+            &lt;/Form>
+        
+        &lt;/Modal.Body>
+        &lt;Modal.Footer>
+            &lt;Button variant="success" size="sm" onClick={transferFunds} >Transfer&lt;/Button>
+            &lt;Button variant="light" size="sm" onClick={cancel}>Cancel&lt;/Button>
+        &lt;/Modal.Footer>
+      &lt;/Modal>
+    );
+  }
+
+  export default TransferModal;</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

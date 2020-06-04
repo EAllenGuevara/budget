@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/Envelopes/components/FundingModal/index.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                <div class="dropdown is-hoverable is-right">
+                    <a class="dropdown-trigger link">
+                        Tutorials
+                        <i class="fas fa-chevron-down fa-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                        
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="App.html">App</a></li></ul><h3>Components</h3><ul><li><a href="Envelopes.html">Envelopes</a></li><li><a href="Ledger.html">Ledger</a></li><li><a href="Transactions.html">Transactions</a></li></ul></div><div class="category"><h2>Modals</h2><h3>Components</h3><ul><li><a href="TransferModal.html">TransferModal</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/Envelopes/components/FundingModal/index.jsx</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+
+//bootstrap
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form'
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton'
+
+import { SYSTEM_ENVELOPES, BUDGET_MODAL_CONSTANTS } from '../../constants';
+//temporary in place of api
+import { FUNDING_PROFILES } from '../../../Budget/components/Funding_Profile/constants';
+
+export default function FundingModal(props) {    
+    const [state, setState] = useState({ 
+        envelopes: props.envelopes.map((envelope) => {
+            return {
+                ...envelope,
+                inputAmount: 0,
+                updatedAmount: envelope.amount,
+            }
+        }),
+        allocation: 0,
+    });
+
+    //list of available funding profiles
+    const fundingProfiles = FUNDING_PROFILES.map((profile, index) => {
+        return &lt;Dropdown.Item as="button" key={index} eventKey={index} onSelect={applyFundingProfile}>
+            {profile.income.name} - {new Intl.DateTimeFormat('en-US').format(new Date(profile.date))}
+        &lt;/Dropdown.Item>
+    });
+
+    //filter out system envelopes and create mutable copy of array
+    let fundingEnvelopes = state.envelopes.map((envelope, i) => {
+        let env = null;
+        if(!envelope.systemEnvelope) {
+            env = &lt;tr key={envelope._id}>
+                &lt;td>{envelope.name}&lt;/td>
+                &lt;td className={envelope.amount &lt; 0 ? 'text-danger':''}>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.amount)}&lt;/td>
+                &lt;td>&lt;Form.Control size="sm" type="number" name={i} value={envelope.inputAmount} onChange={handleInputChange} />&lt;/td>
+                &lt;td className={envelope.updatedAmount &lt; 0 ? 'text-danger':''}>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(envelope.updatedAmount)}&lt;/td>
+            &lt;/tr>;
+        }
+        
+        return env;
+    });
+
+    /**
+     * Updates all envelopes and totals with values from selected funding profile.
+     * Also clears all funding when null is passed as an argument.
+     * @param {Int} eventKey - index of the selected funding profile
+     */
+    function applyFundingProfile(eventKey) {
+        setState(prevState => {
+            const prevStateCopy = {...prevState};
+            const selectedProfile = FUNDING_PROFILES[eventKey] || eventKey;
+            prevStateCopy.envelopes.forEach((env) => {
+                //find matching envelope if none found reset values
+                const matchingEnvelope = selectedProfile 
+                    ? selectedProfile.envelopes.find((profileEnvelope) => env._id === profileEnvelope._id )
+                    : null;
+                env.inputAmount = matchingEnvelope ? matchingEnvelope.amount : 0;
+                env.updatedAmount = matchingEnvelope ? matchingEnvelope.amount + env.amount : env.amount;
+            });
+            //tally up funds to display total allocation
+            prevStateCopy.allocation = prevStateCopy.envelopes.reduce((runningTotal, envelope) => runningTotal + envelope.inputAmount, 0);
+            return prevStateCopy;
+        });        
+    }
+
+    /**
+     * Updates and stores funding amounts from individual envelopes
+     * @param {Object} e - input event object from envelope funding fields
+     */
+    function handleInputChange(e) {
+        const targetIndex = parseInt(e.target.name);
+        const updatedEnvelope = {
+            ...state.envelopes[targetIndex],
+            inputAmount: parseFloat(e.target.value),
+            updatedAmount: parseFloat(e.target.value) + parseFloat(state.envelopes[targetIndex].amount)
+        };
+        setState(prevState => {
+            const prevStateCopy = {...prevState};
+            prevStateCopy.envelopes.splice(targetIndex, 1, updatedEnvelope);
+            //tally up funds to display total allocation
+            prevStateCopy.allocation = prevStateCopy.envelopes.reduce((runningTotal, envelope) => runningTotal + envelope.inputAmount, 0);
+            return prevStateCopy;
+        });
+    }
+
+    function cancel() {
+        props.onHide(BUDGET_MODAL_CONSTANTS.TOGGLE_FUNDING_MODAL);    
+    }
+
+    /**
+     * Create new version of envelopes from state and start passing it all
+     * the way up to the App component.
+     */
+    function fund() {
+        const updatedEnvelopes = state.envelopes.map(envelope => {
+            const envCopy = {...envelope}
+            //update cash pool
+            if(envCopy.name === SYSTEM_ENVELOPES.CASH_POOL) {
+                envCopy.amount = envCopy.amount - state.allocation;
+            //only update if changed
+            } else if(envCopy.updatedAmount !== envCopy.amount) {
+                envCopy.amount = envCopy.updatedAmount;
+            }
+
+            //remove modal properties
+            delete envCopy.updatedAmount;
+            delete envCopy.inputAmount;
+
+            return envCopy;
+        });
+
+        props.onHide(BUDGET_MODAL_CONSTANTS.TOGGLE_FUNDING_MODAL, updatedEnvelopes);
+    }
+
+    return (
+      &lt;Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        &lt;Modal.Header closeButton>
+            Envelope Funding
+        &lt;/Modal.Header>
+        &lt;Modal.Body>
+            &lt;h5>Cash Pool: {props.envelopes[0].amount}&lt;/h5>
+            &lt;DropdownButton id="dropdown-basic-button" size="sm" title="Apply Funding Profile">
+                {fundingProfiles}
+                &lt;Dropdown.Divider />
+                &lt;Dropdown.Item eventKey={null} onSelect={applyFundingProfile}>Clear Allocations&lt;/Dropdown.Item>
+            &lt;/DropdownButton>
+            &lt;form>
+            &lt;table className="table table-striped table-sm">
+                &lt;tbody>
+                    &lt;tr>
+                        &lt;th>Envelope&lt;/th>
+                        &lt;th>Current Balance&lt;/th>
+                        &lt;th>Amount to be Funded&lt;/th>
+                        &lt;th>New Balance&lt;/th>
+                    &lt;/tr>                    
+                    {fundingEnvelopes}                    
+                &lt;/tbody>
+            &lt;/table>
+            &lt;/form>
+            &lt;table className="table table-sm">
+                &lt;tbody>
+                    &lt;tr>
+                        &lt;td>Available&lt;/td>
+                        &lt;td className={props.envelopes[0].amount &lt; 0 ? 'text-danger':''}>{props.envelopes[0].amount}&lt;/td>
+                    &lt;/tr>
+                    &lt;tr>
+                        &lt;td>Allocation&lt;/td>
+                        &lt;td>{state.allocation}&lt;/td>
+                    &lt;/tr>
+                    &lt;tr>
+                        &lt;td>Difference&lt;/td>
+                        &lt;td className={props.envelopes[0].amount - state.allocation &lt; 0 ? 'text-danger':''}>{props.envelopes[0].amount - state.allocation}&lt;/td>
+                    &lt;/tr>
+                &lt;/tbody>
+            &lt;/table>
+        &lt;/Modal.Body>
+        &lt;Modal.Footer>
+            &lt;Button variant="success" size="sm" onClick={fund} disabled={state.allocation === 0}>Fund&lt;/Button>
+            &lt;Button variant="light" size="sm" onClick={cancel}>Cancel&lt;/Button>
+        &lt;/Modal.Footer>
+      &lt;/Modal>
+    );
+  }
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

@@ -1,25 +1,94 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: components/Transactions/index.jsx</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> components/Transactions/index.jsx</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
 </head>
 
-<body>
 
-<div id="main">
 
-    <h1 class="page-title">Source: components/Transactions/index.jsx</h1>
-
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
     
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                <div class="dropdown is-hoverable is-right">
+                    <a class="dropdown-trigger link">
+                        Tutorials
+                        <i class="fas fa-chevron-down fa-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                        
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="App.html">App</a></li></ul><h3>Components</h3><ul><li><a href="Envelopes.html">Envelopes</a></li><li><a href="Ledger.html">Ledger</a></li><li><a href="Transactions.html">Transactions</a></li></ul></div><div class="category"><h2>Modals</h2><h3>Components</h3><ul><li><a href="TransferModal.html">TransferModal</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>components/Transactions/index.jsx</h1>
+                </header>
+                
 
 
 
@@ -28,18 +97,24 @@
         <article>
             <pre class="prettyprint source linenums"><code>import React from 'react'
 
+//third party
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+import Table from 'react-bootstrap/Table';
+
 /**
  * Component to display and edit transactions
+ * @component
  * @param {Object} props 
  */
-export default function Transactions(props) {
+function Transactions(props) {
     /**
      * Sets transaction id to drag event dataTransfer object
      * @param {Object} target - Transaction to be dragged
      * @param {Object} e - Event object
      */
     function handleDrag(target, e) {
-        e.dataTransfer.setData('text', target.id);
+        e.dataTransfer.setData('text', target._id);
     }
 
     /**
@@ -48,11 +123,11 @@ export default function Transactions(props) {
      * @returns {String}
      */
     function getAccountName(accountId) {
-        return props.accounts.find(account => account.id === accountId).name;
+        return props.accounts.find(account => account._id === accountId).name;
     }
 
     const transactions = props.transactions.map((transaction) => {
-            return &lt;tr draggable={true} onDragStart={e => { handleDrag(transaction, e)}} key={transaction.id} item={transaction}>
+            return &lt;tr draggable={true} onDragStart={e => { handleDrag(transaction, e)}} key={transaction._id} item={transaction}>
                 &lt;td>{new Intl.DateTimeFormat('en-US').format(new Date(transaction.date))}&lt;/td>
                 &lt;td>{transaction.name}&lt;/td>
                 &lt;td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(transaction.amount)}&lt;/td>
@@ -62,7 +137,9 @@ export default function Transactions(props) {
         }
     );
 
-    return &lt;table className="table table-striped">
+    return &lt;Tabs defaultActiveKey="new">
+        &lt;Tab eventKey="new" title="New">
+            &lt;Table striped >
                 &lt;tbody>
                     &lt;tr>
                         &lt;th>Date&lt;/th>
@@ -73,27 +150,41 @@ export default function Transactions(props) {
                     &lt;/tr>
                     {transactions}
                 &lt;/tbody>
-            &lt;/table>;
-}</code></pre>
+            &lt;/Table>
+        &lt;/Tab>
+        &lt;Tab eventKey="pending" title="Pending">
+            Blarp
+        &lt;/Tab>
+    &lt;/Tabs>
+    
+}
+
+export default Transactions;</code></pre>
         </article>
     </section>
 
 
 
 
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Feb 25 2020 12:25:46 GMT-0600 (Central Standard Time)
-</footer>
-
-<script> prettyPrint(); </script>
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
 <script src="scripts/linenumber.js"> </script>
+
 </body>
 </html>
