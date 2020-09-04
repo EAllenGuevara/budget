@@ -1,7 +1,8 @@
+import './styles.css';
 import React, { useReducer } from 'react';
 
 //third party
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 
@@ -70,14 +71,14 @@ function Envelopes(props) {
         </tr>
     );
     
-    return <>
-        <ButtonToolbar>
+    return <div className="envelopes-container">
+        <ButtonGroup className="envelope-btns">
             <Button variant="success" size="sm" onClick={() => dispatch({type: BUDGET_MODAL_CONSTANTS.TOGGLE_FUNDING_MODAL, value: true})}>Fund</Button>
             <Button variant="outline-secondary" size="sm" onClick={() => dispatch({type: BUDGET_MODAL_CONSTANTS.TOGGLE_SWEEP_MODAL, value: true})}>Sweep</Button>
             <Button variant="outline-secondary" size="sm" onClick={() => dispatch({type: BUDGET_MODAL_CONSTANTS.TOGGLE_TRANSFER_MODAL, value: true})}>Transfer</Button>
             <Button variant="outline-secondary" size="sm">Add</Button>
             <Button variant="outline-secondary" size="sm">Delete</Button>
-        </ButtonToolbar>
+        </ButtonGroup>
         {state.showFundingModal &&
            <FundingModal show={true} envelopes={props.envelopes} onHide={handleModalClose}></FundingModal> 
         }
@@ -92,7 +93,7 @@ function Envelopes(props) {
                 {envelopes}
             </tbody>
         </Table>
-        </>;
+        </div>;
 }
 
 export default Envelopes;

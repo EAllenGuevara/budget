@@ -123,11 +123,13 @@ class App extends React.Component {
                 <Nav.Link href="#pricing">Accounts</Nav.Link>
               </Nav>
             </Navbar>
-            <Container fluid={true}>
-              <Row>
-                <Col md={3}>
-                  <Row><Envelopes envelopes={this.state.envelopes} onDrop={this.handleTransactionDrop} onFunding={this.handleFunding}/></Row>
-                  <Row><Ledger accounts={this.state.accounts} /></Row>
+            <Container className="main-wrap" fluid>
+              <Row noGutters>
+                <Col md={3} className="envelopes-ledger-wrap">
+                  <Row className="envelopes-wrap" noGutters>
+                    <Envelopes envelopes={this.state.envelopes} onDrop={this.handleTransactionDrop} onFunding={this.handleFunding}/>
+                  </Row>
+                  <Row noGutters><Ledger accounts={this.state.accounts} /></Row>
                 </Col>
                 <Col md={9}>
                   <Transactions transactions={this.state.transactions} accounts={this.state.accounts} />

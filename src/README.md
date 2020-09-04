@@ -4,7 +4,7 @@
 ---
 
 ## TODOs:
-1. Styling
+1. Styling - Ongoing
 2. Pending Transactions
 3. Add envelopes
 4. Delete envelopes
@@ -13,3 +13,4 @@
 7. Select account - see all transactions for target account
 8. Create budgets
 9. Create funding plans
+10. Envelope groups

@@ -36,3 +36,34 @@
     transform: rotate(360deg);
   }
 }
+
+#root {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.main-wrap {
+  padding-left: 0;
+  padding-right: 0;
+  height: calc(100vh - 56px);
+}
+
+.main-wrap > div {
+  height: inherit;
+}
+
+.envelopes-ledger-wrap {
+  border-left: 5px solid;
+  border-right: 5px solid;
+}
+
+.envelopes-wrap {
+  height: calc(70vh - 56px);
+  border-bottom: 5px solid;
+  /* TODO: adjust to have just table content scroll */
+}
+
+.ledger-wrap {
+  height: calc(30vh - 56px);
+}
