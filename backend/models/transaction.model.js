@@ -7,7 +7,9 @@ const transactionSchema = new Schema({
     date: { type: Date, required: true },
     amount: { type: Number, required: true },
     type: { type: String, required: true },
-    accountId: { type: String, require: true },
+    accountId: { type: String, required: true },
+    isPending: { type: Boolean },
+    notes: { type: String, required: false}
 }, {
     timestamps: true,
 });

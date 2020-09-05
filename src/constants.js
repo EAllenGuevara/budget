@@ -3,7 +3,10 @@
 export const INITIAL_STATE = {
     envelopes: [],
     envelopesLoaded: false,
-    transactions: [],
+    transactions: {
+        newTransactions: [],
+        pendingTransactions: [],
+    },
     transactionsLoaded: false,
     accounts: [],
     accountsLoaded: false,

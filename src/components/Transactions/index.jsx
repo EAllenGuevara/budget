@@ -29,8 +29,19 @@ function Transactions(props) {
         return props.accounts.find(account => account._id === accountId).name;
     }
 
-    const transactions = props.transactions.map((transaction) => {
+    const newTransactions = props.transactions.newTransactions.map((transaction) => {
             return <tr draggable={true} onDragStart={e => { handleDrag(transaction, e)}} key={transaction._id} item={transaction}>
+                <td>{new Intl.DateTimeFormat('en-US').format(new Date(transaction.date))}</td>
+                <td>{transaction.name}</td>
+                <td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(transaction.amount)}</td>
+                <td>{transaction.type.replace(/^\w/, c => c.toUpperCase())}</td>
+                <td>{getAccountName(transaction.accountId)}</td>
+            </tr>;
+        }
+    );
+
+    const pendingTransactions = props.transactions.pendingTransactions.map((transaction) => {
+            return <tr>
                 <td>{new Intl.DateTimeFormat('en-US').format(new Date(transaction.date))}</td>
                 <td>{transaction.name}</td>
                 <td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(transaction.amount)}</td>
@@ -51,12 +62,23 @@ function Transactions(props) {
                         <th>Type</th>
                         <th>Account</th>
                     </tr>
-                    {transactions}
+                    {newTransactions}
                 </tbody>
             </Table>
         </Tab>
         <Tab eventKey="pending" title="Pending">
-            Blarp
+        <Table striped >
+                <tbody>
+                    <tr>
+                        <th>Date</th>
+                        <th>Payee</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                        <th>Account</th>
+                    </tr>
+                    {pendingTransactions}
+                </tbody>
+            </Table>
         </Tab>
     </Tabs>
     

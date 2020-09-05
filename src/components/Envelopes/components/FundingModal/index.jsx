@@ -25,7 +25,8 @@ export default function FundingModal(props) {
 
     //list of available funding profiles
     const fundingProfiles = FUNDING_PROFILES.map((profile, index) => {
-        return <Dropdown.Item as="button" key={index} eventKey={index} onSelect={applyFundingProfile}>
+        // 0 index will show up as null in applyFundingProfile if not forced into a string format
+        return <Dropdown.Item as="button" key={index} eventKey={index.toString()} onSelect={applyFundingProfile}>
             {profile.income.name} - {new Intl.DateTimeFormat('en-US').format(new Date(profile.date))}
         </Dropdown.Item>
     });
@@ -48,7 +49,8 @@ export default function FundingModal(props) {
     /**
      * Updates all envelopes and totals with values from selected funding profile.
      * Also clears all funding when null is passed as an argument.
-     * @param {Int} eventKey - index of the selected funding profile
+     * @param {String} eventKey - index of the selected funding profile. SHOULD
+     *  WE PARSE eventKey TO INT??
      */
     function applyFundingProfile(eventKey) {
         setState(prevState => {

@@ -12,14 +12,18 @@ router.route('/add').post((req, res) => {
   const date = req.body.date;
   const amount = req.body.amount;
   const type = req.body.type;
+  const isPending = req.body.isPending;
   const accountId = req.body.accountId;
+  const notes = req.body.notes;
 
   const newTransaction = new Transaction({
       name,
       date,
       amount,
       type,
+      isPending,
       accountId,
+      notes,
     });
 
   newTransaction.save()

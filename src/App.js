@@ -90,10 +90,21 @@ class App extends React.Component {
   }
 
   setOthers(transactionsResponse, envelopesResponse) {
+    //split transactions into new and pending lists
+    let newTransactions = [];
+    let pendingTransactions = [];
+    for (let i = 0; i < transactionsResponse.data.length; i++) {
+      let trans = transactionsResponse.data[i];
+      if(trans.isPending) {
+        pendingTransactions.push(trans);
+      } else {
+        newTransactions.push(trans);
+      }
+    }
     this.setState(state => {
       return {
         ...state,
-        transactions: transactionsResponse.data,
+        transactions: { newTransactions, pendingTransactions },
         transactionsLoaded: true,
         envelopes: envelopesResponse.data,
         envelopesLoaded: true,
