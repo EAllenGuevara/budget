@@ -1,0 +1,3 @@
+export const PENDING_TRANSACTIONS_CONSTANTS = {
+  TOGGLE_PENDING_MODAL: 'togglePendingModal',
+}

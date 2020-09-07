@@ -5,6 +5,9 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Table from 'react-bootstrap/Table';
 
+// internal components
+import PendingTransactions from './components/PendingTransactions';
+
 /**
  * Component to display and edit transactions
  * @component
@@ -40,17 +43,6 @@ function Transactions(props) {
         }
     );
 
-    const pendingTransactions = props.transactions.pendingTransactions.map((transaction) => {
-            return <tr>
-                <td>{new Intl.DateTimeFormat('en-US').format(new Date(transaction.date))}</td>
-                <td>{transaction.name}</td>
-                <td>{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(transaction.amount)}</td>
-                <td>{transaction.type.replace(/^\w/, c => c.toUpperCase())}</td>
-                <td>{getAccountName(transaction.accountId)}</td>
-            </tr>;
-        }
-    );
-
     return <Tabs defaultActiveKey="new">
         <Tab eventKey="new" title="New">
             <Table striped >
@@ -67,18 +59,11 @@ function Transactions(props) {
             </Table>
         </Tab>
         <Tab eventKey="pending" title="Pending">
-        <Table striped >
-                <tbody>
-                    <tr>
-                        <th>Date</th>
-                        <th>Payee</th>
-                        <th>Amount</th>
-                        <th>Type</th>
-                        <th>Account</th>
-                    </tr>
-                    {pendingTransactions}
-                </tbody>
-            </Table>
+            <PendingTransactions 
+                pendingTransactions={props.transactions.pendingTransactions}
+                envelopes={props.envelopes}
+                accounts={props.accounts}
+            />
         </Tab>
     </Tabs>
     

@@ -5,7 +5,7 @@
 
 ## TODOs:
 1. Styling - Ongoing
-2. Pending Transactions
+2. Pending Transactions - Added pending modal, need to update envelopes and transaction list
 3. Add envelopes
 4. Delete envelopes
 5. Sweep - funnel leftover change into target envelopes

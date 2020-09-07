@@ -143,7 +143,11 @@ class App extends React.Component {
                   <Row noGutters><Ledger accounts={this.state.accounts} /></Row>
                 </Col>
                 <Col md={9}>
-                  <Transactions transactions={this.state.transactions} accounts={this.state.accounts} />
+                  <Transactions 
+                    transactions={this.state.transactions}
+                    envelopes={this.state.envelopes}
+                    accounts={this.state.accounts}
+                  />
                 </Col>
               </Row>
             </Container>

@@ -12,8 +12,9 @@ router.route('/add').post((req, res) => {
   const date = req.body.date;
   const amount = req.body.amount;
   const type = req.body.type;
-  const isPending = req.body.isPending;
   const accountId = req.body.accountId;
+  const envelopeId = req.body.envelopeId;
+  const isPending = req.body.isPending;
   const notes = req.body.notes;
 
   const newTransaction = new Transaction({
@@ -21,8 +22,9 @@ router.route('/add').post((req, res) => {
       date,
       amount,
       type,
-      isPending,
       accountId,
+      envelopeId,
+      isPending,
       notes,
     });
 
