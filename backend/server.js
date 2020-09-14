@@ -9,7 +9,6 @@ const app = express();
 
 //provide access to .env variables
 dotenv.config();
-console.log(process.env.DB_ROUTE);
 
 // connects our back end code with the database
 mongoose.connect(process.env.DB_ROUTE, { useNewUrlParser: true, useUnifiedTopology: true });
