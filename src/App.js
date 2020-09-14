@@ -67,9 +67,9 @@ class App extends React.Component {
    * @param {Int} transactionId - id of dropped transaction
    */
   handleTransactionDrop(targetEnvelope, transactionId) {
-    //get transaction object
-    const transactionIndex = this.state.transactions.findIndex(transaction => transaction._id === transactionId);
-    const transaction = { ...this.state.transactions[transactionIndex] };
+    //get transaction object(drag and drop only available for newTransactions)
+    const transactionIndex = this.state.transactions.newTransactions.findIndex(transaction => transaction._id === transactionId);
+    const transaction = { ...this.state.transactions.newTransactions[transactionIndex] };
     //update the amount in the envelope
     const updatedEnvelopeAmount = this.updateAmount(parseFloat(targetEnvelope.amount), transaction);
     const updatedEnvelope = {...targetEnvelope, amount: updatedEnvelopeAmount};
@@ -83,7 +83,10 @@ class App extends React.Component {
       return {
         ...state,
         envelopes: state.envelopes.map(envelope => envelope._id === updatedEnvelope._id ? updatedEnvelope : envelope),
-        transactions: state.transactions.filter(transaction => transaction._id !== transactionId),
+        transactions: {
+          ...state.transactions,
+          newTransactions: state.transactions.newTransactions.filter(transaction => transaction._id !== transactionId),
+        },
         accounts: state.accounts.map(account => account._id === updatedAccount._id ? updatedAccount: account)
       };
     });
